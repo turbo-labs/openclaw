@@ -38,10 +38,13 @@ CONFIG_DIR="$OPENCLAW_STATE_DIR"
 CONFIG_FILE="$CONFIG_DIR/openclaw.json"
 if [ ! -f "$CONFIG_FILE" ]; then
   mkdir -p "$CONFIG_DIR"
-  cat > "$CONFIG_FILE" <<'CONF'
+  cat > "$CONFIG_FILE" <<CONF
 {
   "gateway": {
-    "controlUi": {}
+    "trustedProxies": ["${OPENCLAW_GATEWAY_TRUSTED_PROXIES:-100.64.0.0/10}"],
+    "controlUi": {
+      "allowInsecureAuth": true
+    }
   },
   "plugins": {
     "entries": {
