@@ -41,9 +41,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
   cat > "$CONFIG_FILE" <<'CONF'
 {
   "gateway": {
-    "controlUi": {
-      "allowInsecureAuth": true
-    }
+    "controlUi": {}
   },
   "plugins": {
     "entries": {
