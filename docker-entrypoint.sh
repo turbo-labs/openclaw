@@ -46,6 +46,25 @@ if [ ! -f "$CONFIG_FILE" ]; then
       "allowInsecureAuth": true
     }
   },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "tools": {
+    "profile": "messaging",
+    "deny": ["group:automation", "group:runtime", "group:fs", "sessions_spawn", "sessions_send"],
+    "fs": { "workspaceOnly": true },
+    "exec": { "security": "deny", "ask": "always" },
+    "elevated": { "enabled": false }
+  },
+  "channels": {
+    "whatsapp": {
+      "dmPolicy": "pairing",
+      "groups": { "*": { "requireMention": true } }
+    }
+  },
+  "discovery": {
+    "mdns": { "mode": "off" }
+  },
   "plugins": {
     "entries": {
       "whatsapp": { "enabled": true }
