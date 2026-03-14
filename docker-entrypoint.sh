@@ -74,6 +74,24 @@ if [ ! -f "$CONFIG_FILE" ]; then
 CONF
 fi
 
+# Ensure controlUi has Host-header origin fallback for non-loopback binds.
+# Existing configs from older deploys may lack this, causing gateway startup failure.
+if [ -f "$CONFIG_FILE" ] && command -v node >/dev/null 2>&1; then
+  node -e '
+    const fs = require("fs");
+    const f = process.argv[1];
+    const c = JSON.parse(fs.readFileSync(f, "utf8"));
+    let changed = false;
+    if (!c.gateway) c.gateway = {};
+    if (!c.gateway.controlUi) c.gateway.controlUi = {};
+    if (!c.gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback) {
+      c.gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback = true;
+      changed = true;
+    }
+    if (changed) fs.writeFileSync(f, JSON.stringify(c, null, 2) + "\n");
+  ' "$CONFIG_FILE"
+fi
+
 # --- Security hardening for persistent volume ---
 if [ -d "/data" ]; then
   # Ensure ownership of the top-level /data directories
