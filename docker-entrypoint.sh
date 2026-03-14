@@ -103,6 +103,24 @@ if [ -f "$CONFIG_FILE" ] && command -v node >/dev/null 2>&1; then
       c.gateway.port = port;
       changed = true;
     }
+    // Sync auth token and password from env vars into config
+    const token = process.env.OPENCLAW_GATEWAY_TOKEN;
+    const password = process.env.OPENCLAW_GATEWAY_PASSWORD;
+    if (token) {
+      if (!c.gateway.auth) c.gateway.auth = {};
+      if (c.gateway.auth.token !== token) {
+        c.gateway.auth.mode = "token";
+        c.gateway.auth.token = token;
+        changed = true;
+      }
+    }
+    if (password) {
+      if (!c.gateway.auth) c.gateway.auth = {};
+      if (c.gateway.auth.password !== password) {
+        c.gateway.auth.password = password;
+        changed = true;
+      }
+    }
     if (changed) fs.writeFileSync(f, JSON.stringify(c, null, 2) + "\n");
   ' "$CONFIG_FILE"
 fi
