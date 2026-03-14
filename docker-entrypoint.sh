@@ -88,8 +88,9 @@ if [ -f "$CONFIG_FILE" ] && command -v node >/dev/null 2>&1; then
       c.gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback = true;
       changed = true;
     }
-    if (c.gateway.controlUi.requirePairing !== false) {
-      c.gateway.controlUi.requirePairing = false;
+    // Remove invalid key from previous deploy
+    if (c.gateway.controlUi.requirePairing !== undefined) {
+      delete c.gateway.controlUi.requirePairing;
       changed = true;
     }
     if (changed) fs.writeFileSync(f, JSON.stringify(c, null, 2) + "\n");
