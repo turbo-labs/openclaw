@@ -88,6 +88,10 @@ if [ -f "$CONFIG_FILE" ] && command -v node >/dev/null 2>&1; then
       c.gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback = true;
       changed = true;
     }
+    if (!c.gateway.controlUi.allowInsecureAuth) {
+      c.gateway.controlUi.allowInsecureAuth = true;
+      changed = true;
+    }
     // Remove invalid key from previous deploy
     if (c.gateway.controlUi.requirePairing !== undefined) {
       delete c.gateway.controlUi.requirePairing;
