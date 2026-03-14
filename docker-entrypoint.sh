@@ -97,6 +97,11 @@ if [ -f "$CONFIG_FILE" ] && command -v node >/dev/null 2>&1; then
       delete c.gateway.controlUi.requirePairing;
       changed = true;
     }
+    // Ensure gateway.mode is set so gateway start is not blocked
+    if (!c.gateway.mode) {
+      c.gateway.mode = "local";
+      changed = true;
+    }
     // Ensure gateway port matches Railway PORT env var
     const port = parseInt(process.env.OPENCLAW_GATEWAY_PORT || "8080", 10);
     if (c.gateway.port !== port) {
