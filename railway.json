@@ -18,7 +18,7 @@
     "/data": {}
   },
   "deploy": {
-    "startCommand": "docker-entrypoint.sh openclaw gateway --allow-unconfigured --bind lan --port ${PORT:-8080}",
+    "startCommand": "docker-entrypoint.sh openclaw gateway --allow-unconfigured --bind lan",
     "healthcheckPath": "/health",
     "healthcheckTimeout": 300
   }

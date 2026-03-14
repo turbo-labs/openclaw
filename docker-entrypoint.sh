@@ -97,6 +97,12 @@ if [ -f "$CONFIG_FILE" ] && command -v node >/dev/null 2>&1; then
       delete c.gateway.controlUi.requirePairing;
       changed = true;
     }
+    // Ensure gateway port matches Railway PORT env var
+    const port = parseInt(process.env.OPENCLAW_GATEWAY_PORT || "8080", 10);
+    if (c.gateway.port !== port) {
+      c.gateway.port = port;
+      changed = true;
+    }
     if (changed) fs.writeFileSync(f, JSON.stringify(c, null, 2) + "\n");
   ' "$CONFIG_FILE"
 fi
