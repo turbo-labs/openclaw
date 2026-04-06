@@ -2,14 +2,9 @@
 set -e
 
 # --- Preflight checks ---
-if [ -z "$OPENROUTER_API_KEY" ]; then
-  echo "FATAL: OPENROUTER_API_KEY is not set." >&2
+if [ -z "$ANTHROPIC_API_KEY" ]; then
+  echo "FATAL: ANTHROPIC_API_KEY is not set." >&2
   echo "Add it in your Railway dashboard under Variables, then redeploy." >&2
-  exit 1
-fi
-if [ -z "$TELEGRAM_BOT_TOKEN" ]; then
-  echo "FATAL: TELEGRAM_BOT_TOKEN is not set." >&2
-  echo "Get one from @BotFather on Telegram, then add it in your Railway dashboard." >&2
   exit 1
 fi
 
@@ -45,14 +40,6 @@ if [ ! -f "$CONFIG_FILE" ]; then
   mkdir -p "$CONFIG_DIR"
   cat > "$CONFIG_FILE" <<CONF
 {
-  "agents": {
-    "defaults": {
-      "name": "${OPENCLAW_AGENT_NAME:-OpenClaw}",
-      "model": {
-        "primary": "openrouter/anthropic/claude-sonnet-4"
-      }
-    }
-  },
   "gateway": {
     "trustedProxies": ["${OPENCLAW_GATEWAY_TRUSTED_PROXIES:-100.64.0.0/10}"],
     "controlUi": {
@@ -70,13 +57,9 @@ if [ ! -f "$CONFIG_FILE" ]; then
     "elevated": { "enabled": false }
   },
   "channels": {
-    "telegram": {
-      "enabled": true,
-      "botToken": "${TELEGRAM_BOT_TOKEN}",
+    "whatsapp": {
       "dmPolicy": "pairing",
-      "streaming": "partial",
-      "groups": { "*": { "requireMention": true } },
-      "groupPolicy": "allowlist"
+      "groups": { "*": { "requireMention": true } }
     }
   },
   "discovery": {
@@ -84,7 +67,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
   },
   "plugins": {
     "entries": {
-      "telegram": { "enabled": true }
+      "whatsapp": { "enabled": true }
     }
   }
 }
@@ -140,44 +123,6 @@ if [ -f "$CONFIG_FILE" ] && command -v node >/dev/null 2>&1; then
       if (!c.gateway.auth) c.gateway.auth = {};
       if (c.gateway.auth.password !== password) {
         c.gateway.auth.password = password;
-        changed = true;
-      }
-    }
-    // Sync agent name from env
-    const agentName = process.env.OPENCLAW_AGENT_NAME;
-    if (agentName) {
-      if (!c.agents) c.agents = {};
-      if (!c.agents.defaults) c.agents.defaults = {};
-      if (c.agents.defaults.name !== agentName) {
-        c.agents.defaults.name = agentName;
-        changed = true;
-      }
-    }
-    // Sync Telegram bot token from env
-    const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
-    if (telegramToken) {
-      if (!c.channels) c.channels = {};
-      if (!c.channels.telegram) c.channels.telegram = {};
-      if (c.channels.telegram.botToken !== telegramToken) {
-        c.channels.telegram.enabled = true;
-        c.channels.telegram.botToken = telegramToken;
-        changed = true;
-      }
-      // Ensure telegram plugin is enabled
-      if (!c.plugins) c.plugins = {};
-      if (!c.plugins.entries) c.plugins.entries = {};
-      if (!c.plugins.entries.telegram || !c.plugins.entries.telegram.enabled) {
-        c.plugins.entries.telegram = { enabled: true };
-        changed = true;
-      }
-    }
-    // Sync OpenRouter model as default if no primary model is set
-    if (process.env.OPENROUTER_API_KEY) {
-      if (!c.agents) c.agents = {};
-      if (!c.agents.defaults) c.agents.defaults = {};
-      if (!c.agents.defaults.model) c.agents.defaults.model = {};
-      if (!c.agents.defaults.model.primary) {
-        c.agents.defaults.model.primary = "openrouter/anthropic/claude-sonnet-4";
         changed = true;
       }
     }
