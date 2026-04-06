@@ -2,9 +2,14 @@
 set -e
 
 # --- Preflight checks ---
-if [ -z "$OPENROUTER_API_KEY" ] && [ -z "$ANTHROPIC_API_KEY" ]; then
-  echo "FATAL: No AI provider key found." >&2
-  echo "Set OPENROUTER_API_KEY (recommended) or ANTHROPIC_API_KEY in your Railway dashboard, then redeploy." >&2
+if [ -z "$OPENROUTER_API_KEY" ]; then
+  echo "FATAL: OPENROUTER_API_KEY is not set." >&2
+  echo "Add it in your Railway dashboard under Variables, then redeploy." >&2
+  exit 1
+fi
+if [ -z "$TELEGRAM_BOT_TOKEN" ]; then
+  echo "FATAL: TELEGRAM_BOT_TOKEN is not set." >&2
+  echo "Get one from @BotFather on Telegram, then add it in your Railway dashboard." >&2
   exit 1
 fi
 
