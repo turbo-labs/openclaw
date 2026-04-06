@@ -1,8 +1,16 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "env": {
-    "ANTHROPIC_API_KEY": {
-      "description": "Your Anthropic API key for Claude (from console.anthropic.com)",
+    "OPENROUTER_API_KEY": {
+      "description": "Your OpenRouter API key (from openrouter.ai/keys)",
+      "required": true
+    },
+    "TELEGRAM_BOT_TOKEN": {
+      "description": "Telegram bot token from @BotFather",
+      "required": true
+    },
+    "OPENCLAW_AGENT_NAME": {
+      "description": "Your agent's display name",
       "required": true
     },
     "OPENCLAW_GATEWAY_TOKEN": {
