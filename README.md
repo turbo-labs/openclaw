@@ -8,6 +8,14 @@ OpenClaw is a personal AI assistant platform that runs a gateway server on Node.
 
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/openclaw-secure?referralCode=NVdOal)
 
+You'll be prompted for three variables:
+
+1. **`OPENROUTER_API_KEY`** — get one at [openrouter.ai/keys](https://openrouter.ai/keys)
+2. **`TELEGRAM_BOT_TOKEN`** — create a bot via [@BotFather](https://t.me/BotFather) on Telegram
+3. **`OPENCLAW_AGENT_NAME`** — your agent's display name (e.g. "Jarvis")
+
+That's it. Click deploy and your agent will be live on Telegram.
+
 ## What's included
 
 - OpenClaw gateway (installed via public install script)
@@ -21,15 +29,6 @@ The container runs as a non-root user with hardened volume permissions, a restri
 ## What it looks like
 
 ![OpenClaw Gateway Dashboard](assets/chat.png)
-
-## Setup
-
-OpenClaw requires an Anthropic API key to chat with Claude. For an out-of-the-box experience, add it during the template deployment prompt before launch. Otherwise, you can add it after deploying:
-
-1. In the Railway dashboard, open your OpenClaw service
-2. Go to **Variables**
-3. Add `ANTHROPIC_API_KEY` with your key from [console.anthropic.com](https://console.anthropic.com/)
-4. Redeploy the service
 
 ## Connecting to the gateway
 
@@ -47,7 +46,9 @@ Use the token or password to authenticate on the dashboard `/overview` page when
 
 | Variable | Description |
 |---|---|
-| `ANTHROPIC_API_KEY` | **Required.** Your Anthropic API key for Claude |
+| `OPENROUTER_API_KEY` | **Required.** Your OpenRouter API key |
+| `TELEGRAM_BOT_TOKEN` | **Required.** Telegram bot token from @BotFather |
+| `OPENCLAW_AGENT_NAME` | **Required.** Your agent's display name |
 | `OPENCLAW_GATEWAY_TOKEN` | Auto-generated token for gateway authentication |
 | `OPENCLAW_GATEWAY_PASSWORD` | Auto-generated password for gateway authentication |
 | `PORT` | Automatically set by Railway |
